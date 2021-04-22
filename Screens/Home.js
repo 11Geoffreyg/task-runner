@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { find } from '../lib/user'
 import { ActivityIndicator, Colors } from 'react-native-paper';
-import { Avatar, Card, IconButton } from 'react-native-paper';
-import Map from './Map'
+import { Avatar, Card } from 'react-native-paper';
 
 function UserProvider ({ children }) {
   const [ users, setUsers ] = useState(null)
@@ -12,6 +11,7 @@ function UserProvider ({ children }) {
     async function fetchData() {
       const res = await find()
       setUsers(res)
+      console.log(res)
     }
     fetchData()
   }, [])
@@ -71,7 +71,7 @@ const PaginationProvider = ({ children, users }) => {
         {pages && pages.length > 0 && pages.map(i => (
           <Text
             key={i}
-            style={{ cursor: 'pointer', width: '100%', textAlign: 'center'}}
+            style={{ width: '100%', textAlign: 'center'}}
             onClick={() => handlePageChange(i)}
           >
             {i}
@@ -81,7 +81,7 @@ const PaginationProvider = ({ children, users }) => {
   )
 }
 
-const UserListWithSearchAndPagination = () => (
+const UserListWithSearchAndPagination = ({ navigation }) => (
   // FAAC Bitch 👌
   <UserProvider>
     {users => (
@@ -92,13 +92,14 @@ const UserListWithSearchAndPagination = () => (
             {paginatedUsers => (
               <>
                 {paginatedUsers.map((user, i) => (
-                  <Card.Title
-                    key={i}
-                    title={user.name}
-                    titleStyle={{ color: 'black', fontSize: 20, marginTop: 10 }}
-                    left={(props) => <Avatar.Text {...props} label={user.initials} size= {50} />}
-                    style={{ border: '1px solid lightgrey', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 20, paddingBottom: 0, cursor: 'pointer', background: 'white' }}
-                  />)
+                  <Card key={i} onPress={() => navigation.navigate('Details', { id: user.id })}>
+                    <Card.Title
+                      title={user.name}
+                      titleStyle={{ color: 'black', fontSize: 20, marginTop: 10 }}
+                      left={(props) => <Avatar.Text {...props} label={user.initials} size= {50} />}
+                      style={{ border: '1px solid lightgrey', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 20, paddingBottom: 0, cursor: 'pointer', background: 'white' }}
+                    />
+                  </Card>)
                 )}
               </>
             )}
@@ -111,10 +112,11 @@ const UserListWithSearchAndPagination = () => (
   </UserProvider>
 )
 
-function HomeScreen() {
+function HomeScreen({ navigation }) {
+  useEffect(() => navigation.navigate('Details', {id: 1}))
   return (
     <View>
-      <UserListWithSearchAndPagination />
+      <UserListWithSearchAndPagination navigation={navigation} />
     </View>
   );
 }

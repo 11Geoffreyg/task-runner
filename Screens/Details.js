@@ -3,6 +3,7 @@ import { ScrollView } from 'react-native';
 import { findOne } from '../lib/user';
 import { findOne as getTodos } from '../lib/todos'
 import { ActivityIndicator, Colors } from 'react-native-paper';
+import { StyleSheet, Text, View } from 'react-native';
 // Components
 import { Todos, Map, UserInfos, Albums } from '../Components/Details/index'
 
@@ -35,3 +36,26 @@ export default function DetailsScreen({ route, navigation }) {
     </UserProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  userCard: {
+    boxShadow: '10px 10px 5px rgba(0, 0, 255, .5)',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 30,
+    paddingBottom: 0,
+    cursor: 'pointer',
+    backgroundColor: 'rgba(0, 0, 255, .4)',
+    margin: 20,
+    borderRadius: 30,
+  },
+
+  userCardTitle: {
+    color: 'white',
+    fontSize: 20,
+    marginTop: 10,
+    marginBottom: 10,
+  },
+})

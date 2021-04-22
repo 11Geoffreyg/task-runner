@@ -4,6 +4,7 @@ import { Searchbar } from 'react-native-paper';
 import { find } from '../lib/user'
 import { ActivityIndicator, Colors } from 'react-native-paper';
 import { Avatar, Card, IconButton } from 'react-native-paper';
+import Map from './Map'
 
 function UserProvider ({ children }) {
   const [ users, setUsers ] = useState(null)
@@ -66,16 +67,16 @@ const PaginationProvider = ({ children, users }) => {
   return (
     <>
       {children(paginatedUsers)}
-      <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', height: 30 }}>
+      <View style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', height: 30 }}>
         {pages && pages.length > 0 && pages.map(i => (
-          <span
+          <Text
             key={i}
             style={{ cursor: 'pointer', width: '100%', textAlign: 'center'}}
             onClick={() => handlePageChange(i)}
           >
             {i}
-          </span>))}
-      </div>
+          </Text>))}
+      </View>
     </>
   )
 }
@@ -84,6 +85,7 @@ const UserListWithSearchAndPagination = () => (
   // FAAC Bitch 👌
   <UserProvider>
     {users => (
+      <>
       <SearchbarProvider users={users} >
         {matchingUsers => (
           <PaginationProvider users={matchingUsers}>
@@ -103,6 +105,8 @@ const UserListWithSearchAndPagination = () => (
           </PaginationProvider>
         )}
       </SearchbarProvider>
+      <Map users={users}/>
+      </>
     )}
   </UserProvider>
 )
